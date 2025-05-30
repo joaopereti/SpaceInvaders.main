@@ -3,11 +3,13 @@
 #include <locale.h>
 #include <conio.h>
 #include <string.h>
-//estruturas Ó ser postas
+//estruturas Ã“ ser postas
  struct posicao {
 	int a;
 	int b;
 };
+typedef enum GameScreen { LOGO = 0, TITULO, GAMEPLAY, ENDING } GameScreen;
+
 
 //constantes definidas
 #define TELA_LARGURA 1000
@@ -15,12 +17,14 @@
 #define FONTE_USADA 0
 
 int main() {
-    //Configurar a lÝnguagem falada que serß utilizada no jogo
+    //Configurar a lÃnguagem falada que serÃŸ utilizada no jogo
     setlocale(LC_ALL,"");
 
 
-    //Inicializar janela e abrir o OpenGL context(contexto Ú o local que armazena todas as teclas, informaþ§es ou buffers na mem¾ria
-    InitWindow(TELA_LARGURA,TELA_ALTURA,"SPACE INVADERS: ediþÒo 2025");
+    //Inicializar janela e abrir o OpenGL context(contexto Ãš o local que armazena todas as teclas, informaÃ¾Â§es ou buffers na memÂ¾ria
+    InitWindow(TELA_LARGURA,TELA_ALTURA,"SPACE INVADERS: ediÃ¾Ã’o 2025");
+
+    GameScreen currentScreen = LOGO;
 
     Font fonte[FONTE_USADA] = { 0 };
 
@@ -28,50 +32,58 @@ int main() {
     position.x = 500;
     position.y = 50;
 
-    //Bibliográfia da fonte utilizada: https://www.raylib.com/examples/text/loader.html?name=text_raylib_fonts
+    //BibliogrÃ¡fia da fonte utilizada: https://www.raylib.com/examples/text/loader.html?name=text_raylib_fonts
     fonte[0] = LoadFont("resources/fonts/alagard.png");
 
-    //apontar quantos Frames por Segundo serÒo requeridos para o projeto
+    //apontar quantos Frames por Segundo serÃ’o requeridos para o projeto
+
+    int ContadordeFrames = 0;
 
     SetTargetFPS(60);
 
-    //confere se a aplicaþÒo deve ser fechada
+    //confere se a aplicaÃ¾Ã’o deve ser fechada
     while (!WindowShouldClose()) {
+        switch (currentScreen) {
+        case LOGO:
+            ContadordeFrames++;
+            if(ContadordeFrames > 120)
+                {
+                    currentScreen = TITULO;
+                }
+            break;
+        case TITULO: {
+         if (IsKeyPressed(KEY_N))
+                {
+                    currentScreen = GAMEPLAY;
+                }
+            }break;
+            case GAMEPLAY:
+            {
+
+                if (IsKeyPressed(KEY_C))
+                {
+                    currentScreen = ENDING;
+                }
+            } break;
+        }
 
         BeginDrawing();
 
-        ClearBackground(BLACK);
+        ClearBackground(RAYWHITE);
+        switch(currentScreen) {
+            case LOGO:
+                {
+                    DrawText("SPACE INVADERS", 20, 20, 40, LIGHTGRAY);
+                    DrawText("Espere um momento...", 290, 220, 20, GRAY);
+                }break;
+            }
 
-        DrawTextEx(fonte[0],"SPACE INVADERS", position, 20, 1, RAYWHITE);
-        DrawLine(220, 50, 590, 50, RAYWHITE);
 
 
-        /*  char opcoes_menu;
-        //escaneia as opþ§es desejadas do menu;
-        scanf(" %c", &opcoes_menu);
-
-      switch(opcoes_menu){
-            case 'n':
-                //IsKeyPressed: confere se uma tecla foi pressionada uma vez
-            IsKeyPressed('n');
-            break;
-
-            case 'c':
-            IsKeyPressed('c');
-            break;
-
-            case 't':
-            IsKeyPressed('t');
-            break;
-
-            case  'q':
-            IsKeyPressed('q');
-            break;
-        }*/
         EndDrawing();
     }
     CloseWindow();
-    //A funþÒo getch, oriunda da biblioteca Conio.h, Ú utilizada para retornar o caractere que Ú lido como um n·mero inteiro, ·til para realizar validaþÒo de dados
+    //A funÃ¾Ã’o getch, oriunda da biblioteca Conio.h, Ãš utilizada para retornar o caractere que Ãš lido como um nÂ·mero inteiro, Â·til para realizar validaÃ¾Ã’o de dados
     //getch();
     return 0;
 }
