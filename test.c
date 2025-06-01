@@ -1,89 +1,149 @@
 #include "raylib.h"
-#include <stdio.h>
-#include <locale.h>
 #include <conio.h>
-#include <string.h>
-//estruturas Ó ser postas
- struct posicao {
-	int a;
-	int b;
-};
-typedef enum GameScreen { LOGO = 0, TITULO, GAMEPLAY, ENDING } GameScreen;
 
+//------------------------------------------------------------------------------------------
+// Estruturas e constantes(POR ENQUANTO).
+//------------------------------------------------------------------------------------------
+typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING } GameScreen;
 
-//constantes definidas
 #define TELA_LARGURA 1000
 #define TELA_ALTURA 600
 #define FONTE_USADA 0
+//------------------------------------------------------------------------------------
+// A main príncipal.
+//------------------------------------------------------------------------------------
+int main(void)
+{
+    // Inicialização
+    //--------------------------------------------------------------------------------------
 
-int main() {
-    //Configurar a lÝnguagem falada que serß utilizada no jogo
-    setlocale(LC_ALL,"");
-
-
-    //Inicializar janela e abrir o OpenGL context(contexto Ú o local que armazena todas as teclas, informaþ§es ou buffers na mem¾ria
-    InitWindow(TELA_LARGURA,TELA_ALTURA,"SPACE INVADERS: ediþÒo 2025");
-
+    InitWindow(TELA_LARGURA,TELA_ALTURA, "Space Invaders");
+    int Pontuacao = 0;
+    int Melhor_Pontuacao;
+    int vidas = 3;
     GameScreen currentScreen = LOGO;
 
-    Font fonte[FONTE_USADA] = { 0 };
+    // É aqui em que todas as variáveis serão inicializadas.
 
-    Vector2 position;
-    position.x = 500;
-    position.y = 50;
+    int Contador_frames = 0;          // variável auxiliar, útil para contar frames.
 
-    //Bibliográfia da fonte utilizada: https://www.raylib.com/examples/text/loader.html?name=text_raylib_fonts
-    fonte[0] = LoadFont("resources/fonts/alagard.png");
+    SetTargetFPS(60);               // Apontar quantos frames serão usados.
+    //--------------------------------------------------------------------------------------
 
-    //apontar quantos Frames por Segundo serÒo requeridos para o projeto
+    // Laço de repetição principal do jogo.
+    while (!WindowShouldClose())    // Detectar quando a tela será fechada, apertando esc.
+    {
 
-    int ContadordeFrames = 0;
+        //----------------------------------------------------------------------------------
+        switch (currentScreen)
+        {
+            case LOGO:
+            {
+                // atualizar as variáveis da tela do Logo aqui.
 
-    SetTargetFPS(60);
+                Contador_frames++;    // contar a quantidade de frames.
 
-    //confere se a aplicaþÒo deve ser fechada
-    while (!WindowShouldClose()) {
-        switch (currentScreen) {
-        case LOGO:
-            ContadordeFrames++;
-            if(ContadordeFrames > 120)
+                // Carregar a tela por 2 segundos, para assim ir À tela do título do jogo.
+                if (Contador_frames > 120)
                 {
-                    currentScreen = TITULO;
+                    currentScreen = TITLE;
                 }
-            break;
-        case TITULO: {
-         if (IsKeyPressed(KEY_N))
+            } break;
+            case TITLE:
+            {
+                // Atualizar as variáveis da tela do Título aqui.
+
+                // Pressionar a letra 'n' para começar o novo jogo. Matheus, podemos começar a tela de novo jogo aqui.
+                if (IsKeyPressed(KEY_N) || IsGestureDetected(GESTURE_TAP))
                 {
                     currentScreen = GAMEPLAY;
                 }
-            }break;
+            } break;
             case GAMEPLAY:
             {
+                // Atualizar as variáveis da tela da jogabilidade(gameplay) aqui.
 
-                if (IsKeyPressed(KEY_C))
+                // Press enter to change to ENDING screen
+                if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
                 {
                     currentScreen = ENDING;
                 }
             } break;
-        }
+            case ENDING:
+            {
+                // Atualizar variáveis do menu de fim de jogo aqui.
 
+                // Pressionar a letra 'r' para retornar ao menu principal.
+                if (IsKeyPressed(KEY_R) || IsGestureDetected(GESTURE_TAP))
+                {
+                    currentScreen = TITLE;
+                }
+            } break;
+            default: break;
+        }
+        //----------------------------------------------------------------------------------
+
+        // Desenhar o jogo.
+        //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
-        switch(currentScreen) {
-            case LOGO:
+            ClearBackground(RAYWHITE);
+
+            switch(currentScreen)
+            {
+                case LOGO:
                 {
-                    DrawText("SPACE INVADERS", 20, 20, 40, LIGHTGRAY);
+                    // O logo do jogo é iniciado aqui.
+                    DrawText("SPACE INVADERS - o jogo.", 20, 20, 40, LIGHTGRAY);
                     DrawText("Espere um momento...", 290, 220, 20, GRAY);
-                }break;
+
+                } break;
+                case TITLE:
+                {
+                    // O título do jogo, junto com o menu principal, vai aqui.
+                    DrawRectangle(0, 0, TELA_LARGURA, TELA_ALTURA, BLACK);
+                    DrawText("SPACE INVADERS", 20, 20, 40, RAYWHITE);
+                    DrawText("Novo Jogo(n)", 120, 230, 20, RAYWHITE);
+                    DrawText("Carregar Jogo(c)", 120, 250, 20, RAYWHITE);
+                    DrawText("Top 10(t)", 120, 270, 20, RAYWHITE);
+                    DrawText("Sair (q)", 120, 290, 20, RAYWHITE);
+
+
+
+                } break;
+                case GAMEPLAY:
+                {
+                    // A tela de novo jogo começa aqui.
+                    DrawRectangle(0, 0, TELA_LARGURA, TELA_ALTURA, PURPLE);
+                    DrawText("GAMEPLAY SCREEN", 20, 20, 40, MAROON);
+                    DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
+
+                } break;
+                case ENDING:
+                {
+                    // retorna para a tela do título.
+                    DrawRectangle(0, 0, TELA_LARGURA, TELA_ALTURA, BLUE);
+                    DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
+                    DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
+
+                } break;
+                default: break;
             }
 
-
-
         EndDrawing();
+        //----------------------------------------------------------------------------------
     }
-    CloseWindow();
-    //A funþÒo getch, oriunda da biblioteca Conio.h, Ú utilizada para retornar o caractere que Ú lido como um n·mero inteiro, ·til para realizar validaþÒo de dados
-    //getch();
+
+    // Desinicialização
+    //--------------------------------------------------------------------------------------
+
+    // Aqui irá todos os dados relacionados à texturas, aúdios e fontes de escrita.
+    Font fonte[FONTE_USADA] = { 0 };
+    fonte[0] = LoadFont("resources/fonts/alagard.png");
+
+    CloseWindow();        // fechar a janela e abrir o contexto OpenGL.
+    //--------------------------------------------------------------------------------------
+    //funcao getch, usada para fazer a validação de dados.
+    getch();
     return 0;
 }
