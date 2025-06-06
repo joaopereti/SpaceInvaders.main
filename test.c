@@ -9,6 +9,7 @@ typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING } GameScreen;
 #define TELA_LARGURA 1000
 #define TELA_ALTURA 600
 #define FONTE_USADA 0
+#define TEXTURA_USADA = 0
 //------------------------------------------------------------------------------------
 // A main príncipal.
 //------------------------------------------------------------------------------------
