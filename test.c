@@ -9,7 +9,7 @@ typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING } GameScreen;
 #define TELA_LARGURA 1000
 #define TELA_ALTURA 600
 #define FONTE_USADA 0
-#define TEXTURA_USADA = 0
+#define TEXTURA_USADA  0
 //------------------------------------------------------------------------------------
 // A main príncipal.
 //------------------------------------------------------------------------------------
@@ -139,6 +139,8 @@ int main(void)
     //--------------------------------------------------------------------------------------
 
     // Aqui irá todos os dados relacionados à texturas, aúdios e fontes de escrita.
+    Texture textura[TEXTURA_USADA] = { 0 };
+    textura[0] = LoadTexture(resources/Texture/BlueRedGreen_Spacecraft_V1.0(nave_menor).png);
     Font fonte[FONTE_USADA] = { 0 };
     fonte[0] = LoadFont("resources/fonts/alagard.png");
 
