@@ -8,25 +8,54 @@ typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING } GameScreen;
 
 #define TELA_LARGURA 1000
 #define TELA_ALTURA 600
-#define FONTE_USADA 0
-#define TEXTURA_USADA  0
+#define LINHAS_JOGADOR 10
+#define COLUNAS_JOGADOR 20
+#define FONTE USADA 0
+#define TEXTURA_USADA 0
+
+typedef struct{
+char Matrix[LINHAS_JOGADOR][COLUNAS_JOGADOR];
+}NAVE_JOGADOR;
 //------------------------------------------------------------------------------------
 // A main príncipal.
 //------------------------------------------------------------------------------------
+
+void Desenhar_barra_status(int pontuacao, int vidas, const char*nome)
+{
+    //Fundo
+    DrawRectangle(0, 0, TELA_LARGURA,40, BLACK);
+
+    // Textos da barra de status
+    DrawText(TextFormat("Nome: %s", nome), 20, 10, 20, RAYWHITE);
+    DrawText(TextFormat("Pontuacao: %d", pontuacao), 200, 10, 20, RAYWHITE);
+    DrawText("Dificuldade", 400, 10, 20, GREEN);  // Modo de dificuldade
+    DrawText(TextFormat("Tempo: %.1f", GetTime()), 600, 10, 20, RAYWHITE);  // Cronômetro
+    DrawText(TextFormat("Vidas: %i", vidas), 800, 10, 20, RAYWHITE);
+
+
+}
+
+
+
 int main(void)
 {
     // Inicialização
     //--------------------------------------------------------------------------------------
 
     InitWindow(TELA_LARGURA,TELA_ALTURA, "Space Invaders");
+    //O Retângulo em que ocorre o jogo.
+    Rectangle container = { 50.0f, 50.0f, TELA_LARGURA - 60.0f, TELA_ALTURA - 250.0f };
+
     int Pontuacao = 0;
     int Melhor_Pontuacao;
     int vidas = 3;
+    const char* nome_jogador = "Matheus";
     GameScreen currentScreen = LOGO;
 
     // É aqui em que todas as variáveis serão inicializadas.
-
+    Color Cor_de_borda = RAYWHITE;
     int Contador_frames = 0;          // variável auxiliar, útil para contar frames.
+    double tempo_inicio_jogo = 0.0;
 
     SetTargetFPS(60);               // Apontar quantos frames serão usados.
     //--------------------------------------------------------------------------------------
@@ -34,21 +63,6 @@ int main(void)
     // Laço de repetição principal do jogo.
     while (!WindowShouldClose())    // Detectar quando a tela será fechada, apertando esc.
     {
-        if (IsKeyPressed(KEY_UP)) {
-            if (y_jogador > 0) {
-                matriz[y_jogador][x_jogador] = ' ';
-                y_jogador--;
-                matriz[y_jogador][x_jogador] = '+';
-            }
-        }
-
-        if (IsKeyPressed(KEY_DOWN)) {
-            if (y_jogador < LINHAS - 1) {
-                matriz[y_jogador][x_jogador] = ' ';
-                y_jogador++;
-                matriz[y_jogador][x_jogador] = '+';
-            }
-        }
 
         //----------------------------------------------------------------------------------
         switch (currentScreen)
@@ -73,6 +87,8 @@ int main(void)
                 if (IsKeyPressed(KEY_N) || IsGestureDetected(GESTURE_TAP))
                 {
                     currentScreen = GAMEPLAY;
+                    tempo_inicio_jogo = GetTime(); // Start do cronometro
+                    DrawRectangleLinesEx(container, 3, Cor_de_borda);
                 }
             } break;
             case GAMEPLAY:
@@ -132,7 +148,13 @@ int main(void)
                     // A tela de novo jogo começa aqui.
                     DrawRectangle(0, 0, TELA_LARGURA, TELA_ALTURA, PURPLE);
                     DrawText("GAMEPLAY SCREEN", 20, 20, 40, MAROON);
-                    DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
+                    Desenhar_barra_status(Pontuacao,vidas, nome_jogador);
+                    DrawRectangle(0, 40, TELA_LARGURA, TELA_ALTURA - 40,DARKBLUE);
+                    DrawRectangleLinesEx(container, 3, Cor_de_borda);
+                    DrawTriangle((Vector2){ TELA_LARGURA/4.0f *3.0f, 80.0f },
+                    (Vector2){ TELA_LARGURA/4.0f *3.0f - 60.0f, 150.0f },
+                    (Vector2){ TELA_LARGURA/4.0f *3.0f + 60.0f, 150.0f }, VIOLET);
+
 
                 } break;
                 case ENDING:
@@ -153,15 +175,21 @@ int main(void)
     // Desinicialização
     //--------------------------------------------------------------------------------------
 
-    // Aqui irá todos os dados relacionados à texturas, aúdios e fontes de escrita.
-    Texture textura[TEXTURA_USADA] = { 0 };
-    textura[0] = LoadTexture(resources/Texture/BlueRedGreen_Spacecraft_V1.0(nave_menor).png);
-    Font fonte[FONTE_USADA] = { 0 };
-    fonte[0] = LoadFont("resources/fonts/alagard.png");
+   // Aqui irá todos os dados relacionados à texturas, aúdios e fontes de escrita.
+    //Texture textura[TEXTURA_USADA] = { 0 };
+    //textura[0] = LoadTexture("resources/Texture/BlueRedGreen_Spacecraft_V1.0(nave_menor).png");
+    //Font fonte[FONTE_USADA] = { 0 };
+    //fonte[0] = LoadFont("resources/fonts/alagard.png");
 
     CloseWindow();        // fechar a janela e abrir o contexto OpenGL.
     //--------------------------------------------------------------------------------------
     //funcao getch, usada para fazer a validação de dados.
     getch();
     return 0;
+}
+
+
+
+
+
 }
