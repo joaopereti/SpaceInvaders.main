@@ -34,6 +34,21 @@ int main(void)
     // Laço de repetição principal do jogo.
     while (!WindowShouldClose())    // Detectar quando a tela será fechada, apertando esc.
     {
+        if (IsKeyPressed(KEY_UP)) {
+            if (y_jogador > 0) {
+                matriz[y_jogador][x_jogador] = ' ';
+                y_jogador--;
+                matriz[y_jogador][x_jogador] = '+';
+            }
+        }
+
+        if (IsKeyPressed(KEY_DOWN)) {
+            if (y_jogador < LINHAS - 1) {
+                matriz[y_jogador][x_jogador] = ' ';
+                y_jogador++;
+                matriz[y_jogador][x_jogador] = '+';
+            }
+        }
 
         //----------------------------------------------------------------------------------
         switch (currentScreen)
