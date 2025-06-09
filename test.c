@@ -22,7 +22,7 @@ int y_jogador;
 //------------------------------------------------------------------------------------
 // A main príncipal.
 //------------------------------------------------------------------------------------
-void imprimeMatriz(char matriz[LINHAS_JOGADOR][COLUNAS_JOGADOR]){
+void imprimeMatriz(char matriz[LINHAS_JOGADOR][COLUNAS_JOGADOR], TELA_LARGURA, TELA_ALTURA){
     int x;
     int y;
     for (int i = 0; i < LINHAS_JOGADOR; i++){
@@ -183,7 +183,7 @@ int main(void)
                     Desenhar_barra_status(Pontuacao,vidas, nome_jogador);
                     DrawRectangle(0, 40, TELA_LARGURA, TELA_ALTURA - 40,DARKBLUE);
                     DrawRectangleLinesEx(container, 3, Cor_de_borda);
-                    //imprimeMatriz(matriz);
+                    //imprimeMatriz(matriz,);
 
                 } break;
                 case ENDING:
@@ -216,4 +216,3 @@ int main(void)
     getch();
     return 0;
 }
-
