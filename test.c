@@ -6,19 +6,42 @@
 //------------------------------------------------------------------------------------------
 typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING } GameScreen;
 
+typedef struct{
+int x_jogador;
+int y_jogador;
+}NAVE_JOGADOR;
+
 #define TELA_LARGURA 1000
 #define TELA_ALTURA 600
-#define LINHAS_JOGADOR 10
-#define COLUNAS_JOGADOR 20
+#define TAMANHO_JOGADOR 20
+#define LINHAS_JOGADOR 6
+#define COLUNAS_JOGADOR 6
 #define FONTE USADA 0
 #define TEXTURA_USADA 0
 
-typedef struct{
-char Matrix[LINHAS_JOGADOR][COLUNAS_JOGADOR];
-}NAVE_JOGADOR;
 //------------------------------------------------------------------------------------
 // A main príncipal.
 //------------------------------------------------------------------------------------
+void imprimeMatriz(char matriz[LINHAS_JOGADOR][COLUNAS_JOGADOR]){
+    int x;
+    int y;
+    for (int i = 0; i < LINHAS_JOGADOR; i++){
+        for(int j = 0; j < COLUNAS_JOGADOR; j++){
+            x = X_INICIAL + TAMANHO_JOGADOR * j;
+            y = Y_INICIAL + TAMANHO_JOGADOR * i;
+            if (matriz[i][j] == ' '){
+                DrawRectangle(x, y, TAMANHO_JOGADOR, TAMANHO_JOGADOR, GREEN);
+            }
+            else if (matriz[i][j] == '#'){
+                DrawRectangle(x, y, TAMANHO_JOGADOR, TAMANHO_JOGADOR, GREEN);
+            }
+            else{
+                DrawRectangle(x, y, TAMANHO_JOGADOR, TAMANHO_JOGADOR, GRAY);
+            }
+        }
+    }
+}
+
 
 void Desenhar_barra_status(int pontuacao, int vidas, const char*nome)
 {
@@ -41,6 +64,15 @@ int main(void)
 {
     // Inicialização
     //--------------------------------------------------------------------------------------
+    char matriz[LINHAS_JOGADOR][COLUNAS_JOGADOR] = {
+        {' + '},
+        {' + ',' + '},
+        {' + '},
+    };
+    NAVE_JOGADOR coordenadas
+    coordenadas.x_jogador = 0;
+    coordenadas.y_jogador = 2;
+    matriz[y_jogador][x_jogador] = '+';
 
     InitWindow(TELA_LARGURA,TELA_ALTURA, "Space Invaders");
     //O Retângulo em que ocorre o jogo.
@@ -151,10 +183,7 @@ int main(void)
                     Desenhar_barra_status(Pontuacao,vidas, nome_jogador);
                     DrawRectangle(0, 40, TELA_LARGURA, TELA_ALTURA - 40,DARKBLUE);
                     DrawRectangleLinesEx(container, 3, Cor_de_borda);
-                    DrawTriangle((Vector2){ TELA_LARGURA/4.0f *3.0f, 80.0f },
-                    (Vector2){ TELA_LARGURA/4.0f *3.0f - 60.0f, 150.0f },
-                    (Vector2){ TELA_LARGURA/4.0f *3.0f + 60.0f, 150.0f }, VIOLET);
-
+                    //imprimeMatriz(matriz);
 
                 } break;
                 case ENDING:
